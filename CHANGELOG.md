@@ -1,3 +1,41 @@
+## v10.0.0 (unreleased)
+
+First version of alerta-ng, forked from alerta 9.1.0. It has not been tagged or published yet.
+
+The major version is raised to 10 so that alerta-ng never reuses a version number
+published upstream. This is not a compatibility break: the importable package is still
+`alerta`, and the REST API, database schema and `alerta.plugins` / `alerta.webhooks`
+entry points are unchanged from 9.1.0. Note that with `SERVER_VERSION='major'` the
+`/management` endpoint now reports `10` to clients that previously saw `9`.
+
+`alerta-ng-server` replaces the upstream `alerta-server` distribution. Both install the
+same `alerta` package and cannot be installed side by side; uninstall `alerta-server`
+first when migrating an existing environment.
+
+### Build
+
+- rename the distribution to `alerta-ng-server`
+- make `alerta/version.py` the single source of truth for the version, and remove the `VERSION` file
+- remove the `make upload` target, which published to PyPI bypassing CI
+
+### CI
+
+- run workflows on `main`; pull requests previously ran no tests or linting
+- publish to PyPI with Trusted Publishing instead of a long-lived API token
+- fail a release when the git tag does not match `alerta/version.py`
+- point container images and OCI labels at this fork
+- remove Slack notifications and the fly.io deployment of the upstream demo instance
+
+### Docs
+
+- replace upstream badges, remove a hardcoded upstream Sentry DSN, and record the fork in the licence section
+
+### Chore
+
+- remove the upstream funding configuration
+
+Everything below is the upstream changelog, kept for reference.
+
 ## v9.1.0 (2026-03-28)
 
 ### Feat
