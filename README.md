@@ -1,6 +1,21 @@
 Alerta Release 9.1
 ==================
 
+> **This is alerta-ng, a community-maintained fork of [Alerta](https://github.com/alerta/alerta).**
+>
+> The upstream project is no longer actively maintained — issues and pull requests are not
+> being reviewed or released. alerta-ng exists to keep the project moving: merging fixes that
+> are already sitting unmerged upstream, keeping dependencies and supported Python versions
+> current, and continuing to develop the application for production use.
+>
+> alerta-ng is a drop-in replacement: the importable package is still `alerta`, and the
+> `alerta.plugins` and `alerta.webhooks` entry points are unchanged, so existing plugins and
+> deployments keep working.
+>
+> alerta-ng is not affiliated with, endorsed by, or supported by the upstream maintainers.
+> Please report issues here, not on the upstream tracker.
+
+
 [![Actions Status](https://github.com/alerta/alerta/workflows/CI%20Tests/badge.svg)](https://github.com/alerta/alerta/actions)
 [![Slack chat](https://img.shields.io/badge/chat-on%20slack-blue?logo=slack)](https://slack.alerta.dev)
 [![Coverage Status](https://coveralls.io/repos/github/alerta/alerta/badge.svg?branch=master)](https://coveralls.io/github/alerta/alerta?branch=master)

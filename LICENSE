@@ -199,3 +199,9 @@
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+   alerta-ng — a fork of the above
+   Modifications Copyright 2026 the alerta-ng contributors
+
+   Modifications made in this fork are licensed under the same Apache
+   License, Version 2.0. See the NOTICE file for attribution details.
