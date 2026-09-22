@@ -2,11 +2,10 @@ name: Docker
 
 on:
   push:
-    branches: [ master, release/* ]
+    branches: [ main, release/* ]
     tags: [ '**' ]
 
 env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
   BUILD_NUMBER: ${{ format('{0}-{1}-{2}', github.run_id, github.run_number, github.run_attempt) }}
 
 jobs:
@@ -39,11 +38,4 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Publish Image
-        id: docker-push
         run: docker push --all-tags $REPOSITORY_URL/$IMAGE_NAME
-
-      - uses: act10ns/slack@v2
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-        if: failure()

@@ -4,9 +4,6 @@ on:
   push:
     tags: [ 'v*' ]
 
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
-
 jobs:
   test:
     name: Test
@@ -42,25 +39,23 @@ jobs:
           pip install -r requirements-dev.txt
           pip install .
       - name: Pre-commit hooks
-        id: hooks
         run: |
           pre-commit run -a --show-diff-on-failure
       - name: Test with pytest
-        id: test
         env:
           DATABASE_URL: postgres://postgres:postgres@localhost:5432/alerta
         run: |
           pytest --cov=alerta tests/*.py
-      - uses: act10ns/slack@v2
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-        if: failure()
 
   release:
     name: Publish
     needs: test
     runs-on: ubuntu-latest
+
+    # Trusted Publishing: PyPI authenticates this workflow via OIDC, no token.
+    environment: pypi
+    permissions:
+      id-token: write
 
     steps:
       - uses: actions/checkout@v4
