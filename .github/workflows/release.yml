@@ -26,12 +26,20 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Check tag matches version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          version="$(cut -d "'" -f 2 alerta/version.py)"
+          if [ "$tag" != "$version" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match alerta/version.py (${version})"
+            exit 1
+          fi
+          echo "Releasing ${version}"
       - name: Set up Python 3.11
         uses: actions/setup-python@v5
         with:
           python-version: 3.11
       - name: Install dependencies
-        id: install-deps
         run: |
           python3 -m pip install --upgrade pip
           pip install flake8 pytest
@@ -64,26 +72,14 @@ jobs:
         with:
           python-version: 3.11
       - name: Build
-        id: build
         run: |
-          python3 -m pip install --upgrade build
+          python3 -m pip install --upgrade build twine
           python3 -m build
-      - name: Publish to PyPI
-        id: publish
-        env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
-        run: |
-          python3 -m pip install --upgrade twine
           python3 -m twine check dist/*
-          python3 -m twine upload --verbose dist/*
-
-      - uses: act10ns/slack@v2
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Test Install
         run: |
-          python3 -m pip install --upgrade alerta-server
+          python3 -m pip install --upgrade alerta-ng-server
           python3 -m pip freeze
