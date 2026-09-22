@@ -15,7 +15,7 @@ setuptools.setup(
     py_modules=['routing'],
     install_requires=[
         'requests',
-        'alerta-server'
+        'alerta-ng-server'
     ],
     include_package_data=True,
     zip_safe=False,

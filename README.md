@@ -54,10 +54,15 @@ To install MongoDB on CentOS/RHEL run:
     $ sudo yum install -y mongodb
     $ mongod
 
-To install the Alerta server and client run:
+To install the alerta-ng server and the Alerta client run:
 
-    $ pip install alerta-server alerta
+    $ pip install alerta-ng-server alerta
     $ alertad run
+
+Note that `alerta-ng-server` replaces the upstream `alerta-server` distribution: both
+install the same `alerta` package, so they cannot be installed side by side. Uninstall
+`alerta-server` first when migrating an existing environment. The `alerta` client above
+is the unmodified upstream CLI and is unaffected.
 
 To install the web console run:
 

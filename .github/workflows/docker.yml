@@ -19,16 +19,17 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - name: Read version
+        run: echo "RELEASE=$(cut -d \"'\" -f 2 alerta/version.py)" >> $GITHUB_ENV
       - name: Build Image
-        id: docker-build
         run: >-
           docker build
           --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
           --build-arg BUILD_NUMBER=$BUILD_NUMBER
-          --build-arg RELEASE=$(cat VERSION)
+          --build-arg RELEASE=$RELEASE
           --build-arg VERSION=${{ github.sha }}
           -t $IMAGE_NAME
-          -t $REPOSITORY_URL/$IMAGE_NAME:$(cat VERSION)
+          -t $REPOSITORY_URL/$IMAGE_NAME:$RELEASE
           -t $REPOSITORY_URL/$IMAGE_NAME:$(git rev-parse --short HEAD)
           -t $REPOSITORY_URL/$IMAGE_NAME:latest .
       - name: Docker Login
