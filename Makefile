@@ -11,7 +11,6 @@ DOCKER_COMPOSE=docker-compose
 PRE_COMMIT=$(VENV)/bin/pre-commit
 BUILD=$(VENV)/bin/build
 WHEEL=$(VENV)/bin/wheel
-TWINE=$(VENV)/bin/twine
 GIT=git
 
 .DEFAULT_GOAL:=help
@@ -22,7 +21,6 @@ ifndef PROJECT
     $(error PROJECT is not set)
 endif
 
-PYPI_REPOSITORY ?= pypi
 VERSION=$(shell cut -d "'" -f 2 $(PROJECT)/version.py)
 
 all:	help
@@ -51,9 +49,6 @@ $(BUILD): $(VENV)
 
 $(WHEEL): $(VENV)
 	$(PIP) install --upgrade wheel
-
-$(TWINE): $(VENV)
-	$(PIP) install --upgrade wheel twine
 
 ifdef TOXENV
     toxparams?=-e $(TOXENV)
@@ -109,11 +104,6 @@ tag:
 ## build			- Build package.
 build: $(BUILD)
 	$(PYTHON) -m build
-
-## upload			- Upload package to PyPI.
-upload: $(TWINE)
-	$(TWINE) check dist/*
-	$(TWINE) upload --repository $(PYPI_REPOSITORY) --verbose dist/*
 
 ## clean			- Clean source.
 clean:
