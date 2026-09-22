@@ -28,6 +28,9 @@ setuptools.setup(
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
     url='https://github.com/ospo-ionik/alerta-ng',
+    project_urls={
+        'Mastodon': 'https://mastodon.social/@ospo_ionik',
+    },
     license='Apache License 2.0',
     author='OSPO Ioniktech',
     author_email='ospo@ioniktech.io',
