@@ -1,21 +1,21 @@
 name: Docker
 
+# Build-only check: the image is never pushed from here. Images are
+# published by release.yml, from v* tags only.
+
 on:
   push:
-    branches: [ main, release/* ]
-    tags: [ '**' ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
-env:
-  BUILD_NUMBER: ${{ format('{0}-{1}-{2}', github.run_id, github.run_number, github.run_attempt) }}
+permissions:
+  contents: read
 
 jobs:
   build:
-    name: Build & Push
+    name: Build
     runs-on: ubuntu-latest
-
-    env:
-      REPOSITORY_URL: ghcr.io
-      IMAGE_NAME: ${{ github.repository_owner }}/alerta-api
 
     steps:
       - uses: actions/checkout@v4
@@ -25,18 +25,7 @@ jobs:
         run: >-
           docker build
           --build-arg BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          --build-arg BUILD_NUMBER=$BUILD_NUMBER
+          --build-arg BUILD_NUMBER=${{ github.run_id }}-${{ github.run_number }}-${{ github.run_attempt }}
           --build-arg RELEASE=$RELEASE
           --build-arg VERSION=${{ github.sha }}
-          -t $IMAGE_NAME
-          -t $REPOSITORY_URL/$IMAGE_NAME:$RELEASE
-          -t $REPOSITORY_URL/$IMAGE_NAME:$(git rev-parse --short HEAD)
-          -t $REPOSITORY_URL/$IMAGE_NAME:latest .
-      - name: Docker Login
-        uses: docker/login-action@v3
-        with:
-          registry: ${{ env.REPOSITORY_URL }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish Image
-        run: docker push --all-tags $REPOSITORY_URL/$IMAGE_NAME
+          -t alerta-api:ci .

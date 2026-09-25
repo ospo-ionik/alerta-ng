@@ -24,6 +24,8 @@ first when migrating an existing environment.
 - publish to PyPI with Trusted Publishing instead of a long-lived API token
 - fail a release when the git tag does not match `alerta/version.py`
 - point container images and OCI labels at this fork
+- publish container images only from release tags, after the tests pass, instead of on every push to `main`
+- build the container image, without pushing it, on pull requests and pushes to `main`
 - remove Slack notifications and the fly.io deployment of the upstream demo instance
 
 ### Docs
