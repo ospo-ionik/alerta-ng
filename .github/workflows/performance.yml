@@ -2,11 +2,8 @@ name: Performance
 
 on:
   push:
-    branches: [ master, release/* ]
+    branches: [ main, release/* ]
     tags: [ '**' ]
-
-env:
-  SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 
 jobs:
   load-test:
@@ -27,7 +24,10 @@ jobs:
           --health-timeout 5s
           --health-retries 5
       alerta:
-        image: ghcr.io/alerta/alerta-api
+        image: ghcr.io/${{ github.repository_owner }}/alerta-api:latest
+        credentials:
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
         ports:
           - 8080:8080
         env:
@@ -51,8 +51,3 @@ jobs:
           -T application/json
           -d '{"environment":"Production","service":["network"],"resource":"router01","event":"node_down"}'
           http://localhost:8080/alert
-      - uses: act10ns/slack@v2
-        with:
-          status: ${{ job.status }}
-          steps: ${{ toJson(steps) }}
-        if: failure()

@@ -9,16 +9,31 @@ def read(filename):
     return open(os.path.join(os.path.dirname(__file__), filename)).read()
 
 
+def get_version():
+    """Single source of truth for the version: alerta/version.py.
+
+    Parsed rather than imported, so that building the package does not
+    require its runtime dependencies to be installed first.
+    """
+    for line in read(os.path.join('alerta', 'version.py')).splitlines():
+        if line.startswith('__version__'):
+            return line.split("'")[1]
+    raise RuntimeError('unable to find __version__ in alerta/version.py')
+
+
 setuptools.setup(
-    name='alerta-server',
-    version=read('VERSION'),
-    description='Alerta server WSGI application',
+    name='alerta-ng-server',
+    version=get_version(),
+    description='Alerta-ng server WSGI application (a fork of alerta-server)',
     long_description=read('README.md'),
     long_description_content_type='text/markdown',
-    url='https://github.com/guardian/alerta',
+    url='https://github.com/ospo-ionik/alerta-ng',
+    project_urls={
+        'Mastodon': 'https://mastodon.social/@ospo_ionik',
+    },
     license='Apache License 2.0',
-    author='Nick Satterly',
-    author_email='nfsatterly@gmail.com',
+    author='OSPO Ioniktech',
+    author_email='ospo@ioniktech.io',
     packages=setuptools.find_packages(exclude=['tests']),
     install_requires=[
         'bcrypt',

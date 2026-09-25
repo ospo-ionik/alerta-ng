@@ -5,10 +5,12 @@ ARG BUILD_NUMBER
 ARG RELEASE
 ARG VERSION
 
-LABEL org.opencontainers.image.description="Alerta API (dev)" \
+LABEL org.opencontainers.image.title="alerta-ng-api" \
+      org.opencontainers.image.description="alerta-ng API (a fork of the Alerta API)" \
       org.opencontainers.image.created=$BUILD_DATE \
-      org.opencontainers.image.url="https://github.com/alerta/alerta/pkgs/container/alerta-api" \
-      org.opencontainers.image.source="https://github.com/alerta/alerta" \
+      org.opencontainers.image.url="https://github.com/ospo-ionik/alerta-ng/pkgs/container/alerta-api" \
+      org.opencontainers.image.source="https://github.com/ospo-ionik/alerta-ng" \
+      org.opencontainers.image.vendor="OSPO Ioniktech" \
       org.opencontainers.image.version=$RELEASE \
       org.opencontainers.image.revision=$VERSION \
       org.opencontainers.image.licenses=Apache-2.0
